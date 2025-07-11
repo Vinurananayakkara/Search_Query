@@ -1,8 +1,17 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 
-# --- File Path ---
-# For local file:
-# file_path = 'C:/Users/YourName/Documents/data.xlsx'
+app = FastAPI()
+
+# CORS to allow frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or ["http://localhost:3000"] for stricter control
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Show all columns in output
 pd.set_option('display.max_columns', None)
@@ -15,17 +24,12 @@ file_path = "https://docs.google.com/spreadsheets/d/1yKx5o5sU47jmB8xXFkccDursyd5
 df = pd.read_excel(file_path ,engine='openpyxl')
 
 # --- Search for a row by ID ---
-search_id = 'PRAD001'  # replace with the actual ID you're searching for
+@app.get("/search/{pr_id}")
+def search_pr_id(pr_id: str):
+    result = df[df["PR No"] == pr_id]
+    if not result.empty:
+        return result.to_dict(orient="records")
+    return {"message": "ID not found"}
 
-# Replace 'ID' with the actual column name of the ID column
-result = df[df['PR No'] == search_id]
-
-# --- Print the result ---
-if not result.empty:
-    print("Matching row found:")
-    
-    print(result)
-else:
-    print("ID not found.")
 
 
