@@ -7,7 +7,7 @@ function App() {
 
   const handleSearch = async () => {
     try {
-      const res = await axios.post(`http://localhost:8000/search/${pr_id}`);
+      const res = await axios.get(`http://localhost:8000/search/${pr_id}`);
       setResult(res.data);
     } catch (error) {
       console.error(error);
@@ -38,11 +38,13 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  {Object.values(result[0]).map((value, i) => (
-                    <td key={i}>{value}</td>
-                  ))}
-                </tr>
+                {result.map((row, rowIndex) => (
+                  <tr key={rowIndex}>
+                    {Object.values(row).map((value, i) => (
+        <td key={i}>{value}</td>
+      ))}
+    </tr>
+  ))}
               </tbody>
             </table>
           ) : (
