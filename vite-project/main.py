@@ -12,7 +12,7 @@ app = FastAPI()
 # CORS to allow frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # or ["http://localhost:3000"] for stricter control
+    allow_origins=["http://localhost:5173"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -41,7 +41,7 @@ def search_pr_id(pr_id: str):
             return clean_result
         return {"message": "ID not found"}
     except Exception as e:
-        print("❌ Backend Error:", e)
+        print("Backend Error:", e)
         return {"message": "Internal server error"}
 
 
